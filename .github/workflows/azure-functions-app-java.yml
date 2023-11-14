@@ -34,13 +34,7 @@ jobs:
     steps:
     - name: 'Checkout GitHub Action'
       uses: actions/checkout@v3
-
-    # If you want to use Azure RBAC instead of Publish Profile, then uncomment the task below
-    - name: 'Login via Azure CLI'
-      uses: azure/login@v1
-      with:
-        creds: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE  }} # set up AZURE_RBAC_CREDENTIALS secrets in your repository
-
+      
     - name: Setup Java Sdk ${{ env.JAVA_VERSION }}
       uses: actions/setup-java@v1
       with:
@@ -61,3 +55,10 @@ jobs:
         package: '${{ env.POM_XML_DIRECTORY }}' # if there are multiple function apps in same project, then this path will be like './${{ env.POM_XML_DIRECTORY }}/target/azure-functions/${{ env.POM_FUNCTIONAPP_NAME }'
         publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }} # Remove publish-profile to use Azure RBAC
         respect-pom-xml: true
+
+     # If you want to use Azure RBAC instead of Publish Profile, then uncomment the task below
+    - name: 'deploy'
+      uses:  azure/webapps-deploy@v2
+      with:
+        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+
